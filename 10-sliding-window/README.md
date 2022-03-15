@@ -123,6 +123,60 @@ if ( jacobians ) {
 
 3、相对位姿因子 factor_prvag_relative_pose.hpp
 
+```c++
+/
+// TODO: get square root of information matrix:
+//
+Eigen::LLT< Eigen::Matrix<double, 6, 6> > LowerI(I_);
+// sqrt_info 为上三角阵
+Eigen::Matrix<double, 6, 6> sqrt_info = LowerI.matrixL().transpose();
+
+
+//
+// TODO: compute residual:
+//
+Eigen::Map<Eigen::Matrix<double, 6, 1> > resid(residuals);
+const Eigen::Matrix3d oriRT_i = ori_i.inverse().matrix();
+
+resid.block<3, 1>(INDEX_P, 0) = oriRT_i * (pos_j - pos_i) - pos_ij;
+resid.block<3, 1>(INDEX_R, 0) = ( ori_i.inverse() * ori_j * ori_ij.inverse() ).log();
+
+
+//
+// TODO: compute jacobians:
+//
+if ( jacobians ) {
+    // compute shared intermediate results:
+    Eigen::Map<Eigen::Matrix<double,6,15,Eigen::RowMajor>> jacobian_i(jacobians[0]);
+    Eigen::Map<Eigen::Matrix<double,6,15,Eigen::RowMajor>> jacobian_j(jacobians[1]);
+    jacobian_i.setZero();
+    jacobian_j.setZero();
+    const Eigen::Vector3d deltaR = resid.block<3, 1>(INDEX_R, 0);
+    const Eigen::Matrix3d J_r_inv = JacobianRInv(deltaR);
+    if ( jacobians[0] ) {
+    jacobian_i.block<3, 3>(INDEX_P, INDEX_P) = -oriRT_i;
+    // jacobian_i.block<3, 3>(INDEX_P, INDEX_R) =  oriRT_i * Sophus::SO3d::hat(pos_j - pos_i);
+    Eigen::Vector3d pos_ji = ori_i.inverse() * (pos_j - pos_i);
+    jacobian_i.block<3, 3>(INDEX_P, INDEX_R) = Sophus::SO3d::hat(pos_ji).matrix();
+
+    jacobian_i.block<3, 3>(INDEX_R, INDEX_R) = -J_r_inv * (ori_ij * ori_j.inverse() * ori_i ).matrix();
+    }
+
+    if ( jacobians[1] ) {
+    jacobian_j.block<3, 3>(INDEX_P, INDEX_P) = oriRT_i;
+    jacobian_j.block<3, 3>(INDEX_R, INDEX_R) = J_r_inv * ori_ij.matrix();
+    }
+    jacobian_i = sqrt_info * jacobian_i;
+    jacobian_j = sqrt_info * jacobian_j;
+
+}
+
+//
+// TODO: correct residual by square root of information matrix:
+//
+resid = sqrt_info * resid;
+
+```
 
 4、边缘化因子 factor_prvag_marginalization.hpp
 
