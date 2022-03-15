@@ -263,19 +263,12 @@ rosbag play output.bag
 ,效果如下图 
 <img src="doc/0001.png" alt="Demo" width="100%">
 
-运行下面命令，即可保存地图、轨迹到slam_data目录下
+运行下面命令，即可保存轨迹到slam_data目录下
 ```bash
 ## set up session:
 source install/setup.bash
-# force backend optimization:
-rosservice call /optimize_map
-# save optimized map:
-rosservice call /save_map 
-# if you still use refence Scan Context Loop Closure implementation, execute this command.
-rosservice call /save_scan_context
+rosservice call /save_odometry
 ```
-<img src="doc/map-002.png" alt="Demo" width="100%">
-
 
 在保存的轨迹txt文件中，运行下面命令
 ```
@@ -285,39 +278,41 @@ evo_ape kitti ground_truth.txt laser_odom.txt -r full --plot --plot_mode xy
 # b. fused:
 evo_ape kitti ground_truth.txt optimized.txt -r full --plot --plot_mode xy
 ```
+评测精度结果如下：
+
+<img src="doc/slide-2-001.png" alt="Demo" width="100%">
 
 
-不加IMU,编译运行原始作业框架
-
-<img src="doc/evo-001.png" alt="Demo" width="80%">
-
-<img src="doc/evo-002.png" alt="Demo" width="80%">
-
-增加IMU，重新编译运行作业框架
-<img src="doc/evo-003.png" alt="Demo" width="80%">
-
-<img src="doc/evo-004.png" alt="Demo" width="80%">
+<img src="doc/slide-2-002.png" alt="Demo" width="100%">
 
 
+<img src="doc/slide-2-003.png" alt="Demo" width="100%">
 
-对比地图质量来看，左面地图(添加imu)更加精细一些，线特征分的开一些
 
-<img src="doc/map-003.png" alt="Demo" width="80%">
+<img src="doc/slide-2-004.png" alt="Demo" width="100%">
 
-编译器融合IMU后，只需要IMU提供角速度，IMU不提供加速度和位置增量信息了，编码器提供出位置增量。同时零偏只有IMU的陀螺仪零偏，编码器的零偏没有随机游走，所以不需要考虑：
+可以看到误差非常小，相比之前有明显的提高[惊喜]
 
-<img src="doc/a001.jpg" alt="Demo" width="100%">
+附一张第7章滤波时的截图，之前的误差在10米量级了都，很明显滑窗内做的是整体的非线性优化，会将各个观测的误差都降到最低，但也需要有较好的参数组会。
+<img src="doc/ekf-fused03-1.png" alt="Demo" width="100%">
 
-<img src="doc/a002.jpg" alt="Demo" width="100%">
+修改 /lidar_localization/config/matching/sliding_window.yaml   
+sliding_window_size: 5
 
-<img src="doc/a003.jpg" alt="Demo" width="100%">
+为了凸显效果，将滑窗长度改为5
 
-<img src="doc/a004.jpg" alt="Demo" width="100%">
+再次编译运行
 
-<img src="doc/a005.jpg" alt="Demo" width="100%">
+<img src="doc/slide-3-001.png" alt="Demo" width="100%">
 
-<img src="doc/a006.jpg" alt="Demo" width="100%">
 
-<img src="doc/a007.jpg" alt="Demo" width="100%">
+<img src="doc/slide-3-002.png" alt="Demo" width="100%">
+
+看起来精度微微提升，可能是因为滑窗内帧数较少，求解优化的时候也更容易了
+
+同时可以看到cost也降低了
+
+
+
 
 
