@@ -1,0 +1,30 @@
+/*
+ * @Description: 
+ * @Author: Ren Qian
+ * @Date: 2020-02-05 02:27:30
+ */
+#ifndef LIDAR_LOCALIZATION_GLOBAL_DEFINATION_H_IN_
+#define LIDAR_LOCALIZATION_GLOBAL_DEFINATION_H_IN_
+
+#include <string>
+
+namespace lidar_localization {
+    const std::string WORK_SPACE_PATH = "@WORK_SPACE_PATH@";
+    enum StateOrder
+    {
+        O_P = 0,
+        O_R = 3,
+        O_V = 6,
+        O_BA = 9,
+        O_BG = 12
+    };
+
+    enum NoiseOrder
+    {
+        O_AN = 0,
+        O_GN = 3,
+        O_AW = 6,
+        O_GW = 9
+    };
+}
+#endif
