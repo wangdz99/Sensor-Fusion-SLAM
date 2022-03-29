@@ -129,7 +129,7 @@ bool Activity::UpdatePose(void) {
         Eigen::Vector3d deltas = Eigen::Vector3d::Zero();
         size_t index_curr_ = 1;
         size_t index_prev_ = 0;
-        if(Activity::GetAngularDelta(index_curr_, index_prev_, deltas) == false){
+        if(Activity::GetAngularDelta(    , index_prev_, deltas) == false){
             std::cout << "GetAngularDelta(): index error" << std::endl;
             return false;
         }

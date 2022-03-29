@@ -491,6 +491,12 @@ void ErrorStateKalmanFilter::SetProcessEquation(const Eigen::Matrix3d &C_nb,
                                                 const Eigen::Vector3d &f_n,
                                                 const Eigen::Vector3d &w_b) {
   // TODO: set process / system equation:
+  // static const int INDEX_ERROR_POS = 0;
+  // static const int INDEX_ERROR_VEL = 3;
+  // static const int INDEX_ERROR_ORI = 6;
+  // static const int INDEX_ERROR_ACCEL = 9;
+  // static const int INDEX_ERROR_GYRO = 12;
+
   // a. set process equation for delta vel:
   F_.block<3, 3>(INDEX_ERROR_VEL, INDEX_ERROR_ORI) =
       -C_nb * Sophus::SO3d::hat(f_n).matrix();

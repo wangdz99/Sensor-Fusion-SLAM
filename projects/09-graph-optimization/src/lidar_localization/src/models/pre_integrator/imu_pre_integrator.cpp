@@ -228,9 +228,6 @@ void IMUPreIntegrator::UpdateState(void) {
     // TODO: a. update mean:
     //
 //     // 1. get w_mid:
-    
-//     //ROS_INFO("midpoint integration");
-
 //     Eigen::Vector3d un_acc_0 = delta_q * prev_a;
 //     w_mid = 0.5 * (prev_w + curr_w);
 //     // 2. update relative orientation, so3:
@@ -355,7 +352,7 @@ void IMUPreIntegrator::UpdateState(void) {
     F_.block<3, 3>(INDEX_THETA, INDEX_THETA) = -Sophus::SO3d::hat(w_mid);
 
     //
-    // 3. set up G:
+    // 3. set up B:
     //
     // G11 & G31:
     B_.block<3, 3>(INDEX_ALPHA, INDEX_M_ACC_PREV) = B_.block<3, 3>(INDEX_BETA, INDEX_M_ACC_PREV) = +0.50 * prev_R;

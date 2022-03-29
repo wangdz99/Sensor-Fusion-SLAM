@@ -69,7 +69,7 @@ public:
 		// _error.block<3, 1>(INDEX_A, 0) = Eigen::Vector3d::Zero();
 		// _error.block<3, 1>(INDEX_G, 0) = Eigen::Vector3d::Zero();
 
-		update pre-integration measurement caused by bias change:
+		// update pre-integration measurement caused by bias change:
 		if ( v0->isUpdated() ) {
 			Eigen::Vector3d d_b_a_i, d_b_g_i;
 
