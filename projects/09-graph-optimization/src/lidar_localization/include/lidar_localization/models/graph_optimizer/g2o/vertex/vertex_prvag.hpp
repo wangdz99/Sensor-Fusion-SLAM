@@ -80,31 +80,6 @@ public:
         _estimate.b_g += delta.b_g;
         updateDeltaBiases(delta.b_a, delta.b_g);
 
-        // _estimate.pos += Eigen::Vector3d(
-        //     update[PRVAG::INDEX_POS + 0], update[PRVAG::INDEX_POS + 1], update[PRVAG::INDEX_POS + 2]
-        // );
-        // _estimate.ori = _estimate.ori * Sophus::SO3d::exp(
-        //     Eigen::Vector3d(
-        //         update[PRVAG::INDEX_ORI + 0], update[PRVAG::INDEX_ORI + 1], update[PRVAG::INDEX_ORI + 2]
-        //     )
-        // );
-        // _estimate.vel += Eigen::Vector3d(
-        //     update[PRVAG::INDEX_VEL + 0], update[PRVAG::INDEX_VEL + 1], update[PRVAG::INDEX_VEL + 2]
-        // );
-
-        // Eigen::Vector3d d_b_a_i(
-        //     update[PRVAG::INDEX_B_A + 0], update[PRVAG::INDEX_B_A + 1], update[PRVAG::INDEX_B_A + 2]
-        // );
-        // Eigen::Vector3d d_b_g_i(
-        //     update[PRVAG::INDEX_B_G + 0], update[PRVAG::INDEX_B_G + 1], update[PRVAG::INDEX_B_G + 2]
-        // );
-
-        // _estimate.b_a += d_b_a_i;
-        // _estimate.b_g += d_b_g_i;
-
-        // updateDeltaBiases(d_b_a_i, d_b_g_i);
-
-
     }
 
     bool isUpdated(void) const { return _is_updated; }
